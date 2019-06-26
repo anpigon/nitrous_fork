@@ -37,12 +37,15 @@
         "in_reply_to": "in reply to",
         "insufficient_balance": "잔고 부족",
         "invalid_amount": "잘못된 금액",
+        "links": "링크",
         "joined": "가입일",
         "loading": "로딩중..",
         "login": "로그인",
         "logout": "로그아웃",
         "memo": "메모",
         "mute": "차단",
+        "my_feed": "내 피드",
+        "my_wallet": "내 지갑",
         "my_blog": "내 블로그",
         "my_comments": "내가 쓴 댓글",
         "my_replies": "받은 댓글",
@@ -106,6 +109,7 @@
         "topics": "Topics",
         "toggle_nightmode": "야간모드",
         "all_tags": "전체 태그",
+        "all_tags_mobile": "모든 콘텐츠",
         "transfer": "송금 ",
         "trending_topics": "Trending Topics",
         "type": "Type",
@@ -505,7 +509,8 @@
             "If you recently added new users to follow, your personalized feed will populate once new content is available",
         "empty_feed_3": "Explore Trending Articles",
         "empty_feed_4": "Read The Quick Start Guide",
-        "empty_feed_5": "Browse The FAQ"
+        "empty_feed_5": "Browse The FAQ",
+        "my_feed": "내 피드"
     },
     "explorepost_jsx": {
         "copied": "Copied!",
@@ -632,7 +637,9 @@
         "asset_currently_collecting":
             "%(asset)s의 연이율은 현재 %(interest)s%% 입니다.",
         "beware_of_spam_and_phishing_links":
-            "메모에는 스팸과 피싱 링크가 포함 될 수 있으니 주의하십시오. 신뢰할 수없는 사용자의 링크를 열지 마십시오. 또한 다른 어떤 웹 사이트에도 개인키를 공개하지 마십시오."
+            "메모에는 스팸과 피싱 링크가 포함 될 수 있으니 주의하십시오. 신뢰할 수없는 사용자의 링크를 열지 마십시오. 또한 다른 어떤 웹 사이트에도 개인키를 공개하지 마십시오.",
+        "transactions_make_take_a_few_minutes":
+            "트랜잭션이 블록체인에 반영되기까지 보통 수분이 소요되며 이후 아래 내역에 보여집니다."
     },
     "userwallet_jsx": {
         "conversion_complete_tip": "Will complete on",

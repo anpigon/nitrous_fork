@@ -120,7 +120,12 @@ export async function attachScotData(url, state) {
             `get_discussions_by_${feedType}`,
             discussionQuery
         );
-        await fetchMissingData(tag, feedType, state, feedData);
+        await fetchMissingData(
+            tag,
+            feedType,
+            state,
+            Array.isArray(feedData) ? feedData : []
+        );
         return;
     }
 
