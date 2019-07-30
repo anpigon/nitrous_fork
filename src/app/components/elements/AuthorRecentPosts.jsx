@@ -6,8 +6,6 @@ import tt from 'counterpart';
 
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
 
-import LoadingIndicator from 'app/components/elements/LoadingIndicator';
-
 const formatDate = date => {
     const d = new Date(`${date}Z`);
     const yyyy = d.getFullYear();
@@ -18,10 +16,14 @@ const formatDate = date => {
 
 class AuthorRecentPosts extends PureComponent {
     componentDidMount() {
+        const { author, permlink } = this.props;
+        const postFilter = value =>
+            value.author === author && value.permlink !== permlink;
         this.props.requestData({
+            limit: 5,
             order: 'by_author',
             accountname: this.props.author,
-            postFilter: value => value.author === this.props.author,
+            postFilter,
         });
     }
 
@@ -30,7 +32,7 @@ class AuthorRecentPosts extends PureComponent {
         const fetching = (status && status.fetching) || this.props.loading;
         const posts = accounts ? accounts.get('') : [];
 
-        if (!fetching && (posts && posts.size))
+        if (!fetching && (posts && posts.size)) {
             return (
                 <div className={classNames('AuthorRecentPosts', 'callout')}>
                     <h6>{this.props.author}님의 최근 글</h6>
@@ -39,7 +41,7 @@ class AuthorRecentPosts extends PureComponent {
                             {posts.map(item => {
                                 const cont = content.get(item);
                                 return (
-                                    <tr>
+                                    <tr key={cont.get('post_id')}>
                                         <th>
                                             <a href={cont.get('url')}>
                                                 {cont.get('title')}
@@ -59,12 +61,8 @@ class AuthorRecentPosts extends PureComponent {
                     </table>
                 </div>
             );
-        else if (fetching)
-            return (
-                <center>
-                    <LoadingIndicator type="circle" />
-                </center>
-            );
+        }
+        return null;
     }
 }
 
@@ -78,6 +76,7 @@ export default connect(
         global_status: state.global.getIn(['status', '', 'by_author']),
         accounts: state.global.getIn(['accounts', ownProps.author]),
         content: state.global.get('content'),
+        ...ownProps,
     }),
     dispatch => ({
         requestData: args => dispatch(fetchDataSagaActions.requestData(args)),

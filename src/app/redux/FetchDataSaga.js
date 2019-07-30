@@ -275,7 +275,7 @@ export function* fetchData(action) {
         args = [
             {
                 tag: accountname,
-                limit: constants.FETCH_DATA_BATCH_SIZE,
+                limit: action.payload.limit || constants.FETCH_DATA_BATCH_SIZE,
                 start_author: author,
                 start_permlink: permlink,
             },
@@ -327,7 +327,8 @@ export function* fetchData(action) {
             fetchDone =
                 endOfData ||
                 fetchLimitReached ||
-                fetched >= constants.FETCH_DATA_BATCH_SIZE;
+                fetched >= action.payload.limit ||
+                constants.FETCH_DATA_BATCH_SIZE;
 
             yield put(
                 globalActions.receiveData({
