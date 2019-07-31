@@ -26,10 +26,11 @@ class AuthorRecentPosts extends React.PureComponent {
     }
 
     async getDiscussionsByAuthor() {
-        const { author } = this.props;
+        const { author, permlink } = this.props;
 
         // prettier-ignore
         const posts = (await steem.api.getDiscussionsByAuthorBeforeDateAsync(author, '', 0, 10))
+            .filter(e => e.permlink !== permlink)
             .map(e => ({
                 id: e.post_id,
                 url: e.url,
