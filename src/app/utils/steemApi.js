@@ -133,12 +133,8 @@ export async function attachScotData(url, state) {
             token: LIQUID_TOKEN_UPPERCASE,
             limit: 20,
         };
-        if (tag) {
-            discussionQuery.tag = tag;
-        }
-        // first call feed.
         let feedData = await getScotDataAsync(
-            `get_discussions_by_${feedType}`,
+            `get_discussions_by_author`,
             discussionQuery
         );
         await fetchMissingData(tag, feedType, state, feedData);
