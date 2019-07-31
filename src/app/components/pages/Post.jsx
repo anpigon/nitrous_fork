@@ -302,6 +302,7 @@ export default connect((state, ownProps) => {
         ];
         ignoring = state.global.getIn(key, emptySet);
     }
+    debugger;
     return {
         content: state.global.get('content'),
         ignoring,

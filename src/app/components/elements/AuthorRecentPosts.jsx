@@ -1,62 +1,69 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import classNames from 'classnames';
 import tt from 'counterpart';
+import * as steem from '@steemit/steem-js';
 
-import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
-
-const formatDate = date => {
-    const d = new Date(`${date}Z`);
+const formatDate = d => {
     const yyyy = d.getFullYear();
     const mm = String(d.getMonth() + 1).padStart(2, '0');
     const dd = String(d.getDate()).padStart(2, '0');
     return `${yyyy}-${mm}-${dd}`;
 };
 
-class AuthorRecentPosts extends PureComponent {
+class AuthorRecentPosts extends React.PureComponent {
+    constructor(props) {
+        super(props);
+        console.log('props', props);
+        this.state = {
+            fetching: true,
+            posts: [],
+        };
+    }
+
     componentDidMount() {
-        const { author, permlink } = this.props;
-        const postFilter = value =>
-            value.author === author && value.permlink !== permlink;
-        this.props.requestData({
-            limit: 5,
-            order: 'by_author',
-            accountname: this.props.author,
-            postFilter,
+        this.getDiscussionsByAuthor();
+    }
+
+    async getDiscussionsByAuthor() {
+        const { author } = this.props;
+
+        // prettier-ignore
+        const posts = (await steem.api.getDiscussionsByAuthorBeforeDateAsync(author, '', 0, 10))
+            .map(e => ({
+                id: e.post_id,
+                url: e.url,
+                title: e.title,
+                children: e.children,
+                created: new Date(`${e.created}Z`),
+            }))
+            .sort((a, b) => b.created - a.created)
+            .slice(0, 5);
+
+        this.setState({
+            fetching: false,
+            posts,
         });
     }
 
     render() {
-        const { status, accounts, content } = this.props;
-        const fetching = (status && status.fetching) || this.props.loading;
-        const posts = accounts ? accounts.get('') : [];
-
-        if (!fetching && (posts && posts.size)) {
+        const { fetching, posts } = this.state;
+        if (!fetching && (posts && posts.length)) {
             return (
                 <div className={classNames('AuthorRecentPosts', 'callout')}>
                     <h6>{this.props.author}님의 최근 글</h6>
                     <table>
                         <tbody>
-                            {posts.map(item => {
-                                const cont = content.get(item);
-                                return (
-                                    <tr key={cont.get('post_id')}>
-                                        <th>
-                                            <a href={cont.get('url')}>
-                                                {cont.get('title')}
-                                            </a>
-                                            {'  '}
-                                            <span>
-                                                ({cont.get('children')})
-                                            </span>
-                                        </th>
-                                        <td>
-                                            {formatDate(cont.get('created'))}
-                                        </td>
-                                    </tr>
-                                );
-                            })}
+                            {posts.map(e => (
+                                <tr key={e.id}>
+                                    <th>
+                                        <a href={e.url}>{e.title}</a>
+                                        {'  '}
+                                        <span>({e.children})</span>
+                                    </th>
+                                    <td>{formatDate(e.created)}</td>
+                                </tr>
+                            ))}
                         </tbody>
                     </table>
                 </div>
@@ -70,15 +77,4 @@ AuthorRecentPosts.propTypes = {
     author: PropTypes.string.isRequired,
 };
 
-export default connect(
-    (state, ownProps) => ({
-        loading: state.app.get('loading'),
-        global_status: state.global.getIn(['status', '', 'by_author']),
-        accounts: state.global.getIn(['accounts', ownProps.author]),
-        content: state.global.get('content'),
-        ...ownProps,
-    }),
-    dispatch => ({
-        requestData: args => dispatch(fetchDataSagaActions.requestData(args)),
-    })
-)(AuthorRecentPosts);
+export default AuthorRecentPosts;
