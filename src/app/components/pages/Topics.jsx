@@ -107,6 +107,7 @@ const Topics = ({
         const categoriesLinks = categories.map(cat => {
             const { tag, label } = parseCategory(cat);
             const link = order ? `/${order}/${tag}` : `/hot/${tag}`;
+            const translateLabel = tt(`tags.${label}`, { fallback: label });
             return (
                 <li className="c-sidebar__list-item" key={tag}>
                     <Link
@@ -114,7 +115,7 @@ const Topics = ({
                         className="c-sidebar__link"
                         activeClassName="active"
                     >
-                        {label}
+                        {translateLabel}
                     </Link>
                 </li>
             );
