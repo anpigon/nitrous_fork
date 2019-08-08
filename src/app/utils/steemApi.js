@@ -52,6 +52,7 @@ async function getAuthorRep(feedData) {
 function mergeContent(content, scotData) {
     const voted = content.active_votes;
     const lastUpdate = content.last_update;
+    const title = content.title;
     Object.assign(content, scotData);
     if (voted) {
         const scotVoted = new Set(content.active_votes.map(v => v.voter));
@@ -65,8 +66,12 @@ function mergeContent(content, scotData) {
             }
         });
     }
+    // Restore currently buggy fields
     if (lastUpdate) {
         content.last_update = lastUpdate;
+    }
+    if (title) {
+        content.title = title;
     }
     content.scotData = {};
     content.scotData[LIQUID_TOKEN_UPPERCASE] = scotData;
@@ -151,6 +156,7 @@ export async function attachScotData(url, state) {
         const [
             tokenBalances,
             tokenUnstakes,
+            tokenDelegations,
             tokenStatuses,
             transferHistory,
         ] = await Promise.all([
@@ -162,6 +168,10 @@ export async function attachScotData(url, state) {
                 account,
                 symbol: LIQUID_TOKEN_UPPERCASE,
             }),
+            ssc.find('tokens', 'delegations', {
+                $or: [{ from: account }, { to: account }],
+                symbol: LIQUID_TOKEN_UPPERCASE,
+            }),
             getScotAccountDataAsync(account),
             getSteemEngineAccountHistoryAsync(account),
         ]);
@@ -170,6 +180,9 @@ export async function attachScotData(url, state) {
         }
         if (tokenUnstakes) {
             state.accounts[account].token_unstakes = tokenUnstakes;
+        }
+        if (tokenDelegations) {
+            state.accounts[account].token_delegations = tokenDelegations;
         }
         if (tokenStatuses && tokenStatuses[LIQUID_TOKEN_UPPERCASE]) {
             state.accounts[account].token_status =
