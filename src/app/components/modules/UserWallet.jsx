@@ -59,6 +59,10 @@ class UserWallet extends React.Component {
         this.setState({ claimInProgress: true }); // disable the claim button
         this.props.claimRewards(account);
     };
+    handleClaimTokenRewards = token => {
+        const { account, claimTokenRewards } = this.props;
+        claimTokenRewards(account, token);
+    };
     render() {
         const {
             onShowDepositSteem,
@@ -86,7 +90,6 @@ class UserWallet extends React.Component {
         const otherTokenBalances = allTokenBalances
             .filter(({ symbol }) => symbol !== LIQUID_TOKEN_UPPERCASE)
             .sort((a, b) => (a.symbol > b.symbol ? 1 : -1));
-
         const tokenUnstakes = account.has('token_unstakes')
             ? account.get('token_unstakes').toJS()
             : {
@@ -98,6 +101,9 @@ class UserWallet extends React.Component {
             : {
                   pending_token: 0,
               };
+        const allTokenStatus = account.has('all_token_status')
+            ? account.get('all_token_status').toJS()
+            : [];
         const balance = tokenBalances.balance;
         const delegatedStake = tokenBalances.delegationsOut || '0';
         const stakeBalance =
@@ -334,29 +340,31 @@ class UserWallet extends React.Component {
                     </div>
                 )}
                 {/* Steem Engine Tokens */}
-                {otherTokenBalances &&
-                    otherTokenBalances.length && (
-                        <div
-                            className={classNames(
-                                'UserWallet__balance',
-                                'row',
-                                { zebra: parseFloat(pendingUnstakeBalance) }
-                            )}
-                        >
-                            <div className="column small-12">
-                                Steem Engine Token
-                                <FormattedHTMLMessage
-                                    className="secondary"
-                                    id="tips_js.steem_engine_tokens"
-                                />
-                            </div>
-                            <div className="column small-12">
-                                <FormattedAssetTokens
-                                    items={otherTokenBalances}
-                                />
-                            </div>
+                {otherTokenBalances && otherTokenBalances.length ? (
+                    <div
+                        className={classNames('UserWallet__balance', 'row', {
+                            zebra: parseFloat(pendingUnstakeBalance),
+                        })}
+                    >
+                        <div className="column small-12">
+                            Steem Engine Token
+                            <FormattedHTMLMessage
+                                className="secondary"
+                                id="tips_js.steem_engine_tokens"
+                            />
                         </div>
-                    )}
+                        <div className="column small-12">
+                            <FormattedAssetTokens
+                                items={otherTokenBalances}
+                                isMyAccount={isMyAccount}
+                                allTokenStatus={allTokenStatus}
+                                handleClaimTokenRewards={
+                                    this.handleClaimTokenRewards
+                                }
+                            />
+                        </div>
+                    </div>
+                ) : null}
                 {disabledWarning && (
                     <div className="row">
                         <div className="column small-12">
@@ -430,6 +438,28 @@ export default connect(
                 }),
             };
 
+            dispatch(
+                transactionActions.broadcastOperation({
+                    type: 'custom_json',
+                    operation,
+                    successCallback,
+                })
+            );
+        },
+
+        claimTokenRewards: (account, symbol) => {
+            const username = account.get('name');
+            const successCallback = () => {
+                dispatch(
+                    globalActions.getState({ url: `@${username}/transfers` })
+                );
+                alert('Success Claim!!');
+            };
+            const operation = {
+                id: 'scot_claim_token',
+                required_posting_auths: [username],
+                json: JSON.stringify({ symbol }),
+            };
             dispatch(
                 transactionActions.broadcastOperation({
                     type: 'custom_json',

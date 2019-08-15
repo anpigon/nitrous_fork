@@ -188,6 +188,7 @@ export async function attachScotData(url, state) {
         if (tokenStatuses && tokenStatuses[LIQUID_TOKEN_UPPERCASE]) {
             state.accounts[account].token_status =
                 tokenStatuses[LIQUID_TOKEN_UPPERCASE];
+            state.accounts[account].all_token_status = tokenStatuses;
         }
         if (transferHistory) {
             // Reverse to show recent activity first
