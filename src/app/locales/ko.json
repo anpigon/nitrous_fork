@@ -542,7 +542,9 @@
         "converted_VESTING_TOKEN_can_be_sent_to_yourself_but_can_not_transfer_again":
             "Converted %(VESTING_TOKEN)s can be sent to yourself or someone else but can not transfer again without converting back to %(LIQUID_TOKEN)s.",
         "part_of_your_steem_power_is_currently_delegated":
-            "%(user_name)s 님은 STEEM POWER 를 임대 받고 있습니다. 임대 받는 양은 가입 시기에 따라 가변적입니다."
+            "%(user_name)s 님은 STEEM POWER 를 임대 받고 있습니다. 임대 받는 양은 가입 시기에 따라 가변적입니다.",
+        "snax_token":
+            "Snax는 사용자들이 소셜 활동에 대한 보상을 받을 수 있는 블록체인 플랫폼입니다. 그리고 Steem 계정과 통합될 수 있습니다.<br><a href='https://snax.one' class='external-link' target='_blank'>Snax.One</a>에서 Snax에 대해 자세히 알아보십시오."
     },
     "promote_post_jsx": {
         "promote_post": "Promote Post",

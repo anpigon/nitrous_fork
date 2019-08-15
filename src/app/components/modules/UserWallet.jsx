@@ -97,6 +97,9 @@ class UserWallet extends React.Component {
         const tokenDelegations = account.has('token_delegations')
             ? account.get('token_delegations').toJS()
             : [];
+        const [snaxBalance] = account.has('snax_balance')
+            ? account.get('snax_balance').toJS()
+            : [];
 
         let isMyAccount =
             current_user &&
@@ -192,6 +195,9 @@ class UserWallet extends React.Component {
             numberWithCommas((-netDelegatedStake).toFixed(scotPrecision));
         const pending_unstake_balance_str = numberWithCommas(
             pendingUnstakeBalance
+        );
+        const snax_balance_str = numberWithCommas(
+            parseFloat(snaxBalance).toString()
         );
 
         const reward = tokenStatus.pending_token / Math.pow(10, scotPrecision);
@@ -321,6 +327,22 @@ class UserWallet extends React.Component {
                         <TransactionError opType="withdraw_vesting" />
                     </div>
                 </div>
+                {parseFloat(snaxBalance) ? (
+                    <div className="UserWallet__balance row">
+                        <div className="column small-12 medium-8">
+                            {' SNAX Tokens'}
+                            <FormattedHTMLMessage
+                                className="secondary"
+                                id="tips_js.snax_token"
+                            />
+                        </div>
+                        <div className="column small-12 medium-4">
+                            {snax_balance_str}
+                            {' SNAX'}
+                        </div>
+                    </div>
+                ) : null}
+
                 {disabledWarning && (
                     <div className="row">
                         <div className="column small-12">
