@@ -160,9 +160,13 @@ export async function attachScotData(url, state) {
             transferHistory,
             tokenDelegations,
         ] = await Promise.all([
-            ssc.findOne('tokens', 'balances', {
+            // modified to get all tokens. - by anpigon
+            // ssc.findOne('tokens', 'balances', {
+            //     account,
+            //     symbol: LIQUID_TOKEN_UPPERCASE,
+            // }),
+            ssc.find('tokens', 'balances', {
                 account,
-                symbol: LIQUID_TOKEN_UPPERCASE,
             }),
             ssc.findOne('tokens', 'pendingUnstakes', {
                 account,
