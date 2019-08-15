@@ -32,6 +32,7 @@ class Modals extends React.Component {
         show_login_modal: false,
         show_delegations_modal: false,
         show_post_advanced_settings_modal: '',
+        show_delegations_modal: false,
     };
     static propTypes = {
         show_login_modal: PropTypes.bool,
@@ -54,6 +55,8 @@ class Modals extends React.Component {
         notifications: PropTypes.object,
         show_terms_modal: PropTypes.bool,
         removeNotification: PropTypes.func,
+        show_delegations_modal: PropTypes.bool,
+        hideDelegations: PropTypes.func.isRequired,
     };
 
     constructor() {
@@ -83,6 +86,8 @@ class Modals extends React.Component {
             hidePostAdvancedSettings,
             hideDelegations,
             username,
+            show_delegations_modal,
+            hideDelegations,
         } = this.props;
 
         const notifications_array = notifications
@@ -217,6 +222,7 @@ export default connect(
             show_post_advanced_settings_modal: state.user.get(
                 'show_post_advanced_settings_modal'
             ),
+            show_delegations_modal: state.user.get('show_delegations_modal'),
         };
     },
     dispatch => ({
@@ -257,5 +263,9 @@ export default connect(
         // example: addNotification: ({key, message}) => dispatch({type: 'ADD_NOTIFICATION', payload: {key, message}}),
         removeNotification: key =>
             dispatch(appActions.removeNotification({ key })),
+        hideDelegations: e => {
+            if (e) e.preventDefault();
+            dispatch(userActions.hideDelegations());
+        },
     })
 )(Modals);

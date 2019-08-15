@@ -30,12 +30,14 @@ class Delegations extends React.Component {
                 </div>
                 <table>
                     <thead>
-                        <th>From</th>
-                        <th>To</th>
-                        <th className="amount">Amount</th>
-                        <th>Symbol</th>
-                        <th>Created</th>
-                        <th>Updated</th>
+                        <tr>
+                            <th>From</th>
+                            <th>To</th>
+                            <th className="amount">Amount</th>
+                            <th>Symbol</th>
+                            <th>Created</th>
+                            <th>Updated</th>
+                        </tr>
                     </thead>
                     <tbody>
                         {tokenDelegations.map((e, i) => (
@@ -80,7 +82,6 @@ export default connect(
     // mapStateToProps
     (state, ownProps) => {
         const value = state.user.get('delegations');
-        // const accounts = state.global.get('accounts');
         return {
             ...ownProps,
             account: value.get('account'),

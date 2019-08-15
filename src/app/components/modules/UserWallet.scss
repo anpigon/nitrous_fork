@@ -20,7 +20,11 @@
         color: themed('textColorPrimary');
       }
   }
+<<<<<<< HEAD
 
+=======
+  
+>>>>>>> scotty_zzan
   .Delegations__view {
 
     a {
@@ -33,6 +37,10 @@
         fill: themed('iconColorSecondary');
       }
     }
+<<<<<<< HEAD
+=======
+
+>>>>>>> scotty_zzan
     .Delegations__view-icon:hover {
       @include themify($themes) {
         fill: themed('textColorPrimary');
@@ -40,6 +48,7 @@
     }
   }
 }
+
 .UserWallet__buysp {  
   margin-right: 0 !important; 
   margin-top: 1rem; 

@@ -213,6 +213,7 @@ export default class UserProfile extends React.Component {
                         showPowerdown={this.props.showPowerdown}
                         showDelegations={this.props.showDelegations}
                         cancelUnstake={this.props.cancelUnstake}
+                        showDelegations={this.props.showDelegations}
                     />
                 </div>
             );
@@ -657,10 +658,6 @@ module.exports = {
                 dispatch(userActions.setPowerdownDefaults(powerdownDefaults));
                 dispatch(userActions.showPowerdown());
             },
-            showDelegations: delegations => {
-                dispatch(userActions.setDelegations(delegations));
-                dispatch(userActions.showDelegations());
-            },
             cancelUnstake: ({ account, transactionId }) => {
                 const cancelUnstakeOp = {
                     contractName: 'tokens',
@@ -689,6 +686,10 @@ module.exports = {
             },
             requestData: args =>
                 dispatch(fetchDataSagaActions.requestData(args)),
+            showDelegations: delegations => {
+                dispatch(userActions.setDelegations(delegations));
+                dispatch(userActions.showDelegations());
+            },
         })
     )(UserProfile),
 };
