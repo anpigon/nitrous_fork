@@ -208,6 +208,14 @@ export function* broadcastOperation({
 
 export function* broadcastMultiOperations({ payload: { operations } }) {
     try {
+        yield put(
+            appActions.addNotification({
+                key: 'trx_' + Date.now(),
+                message: `All claim started. It is completed after about ${operations.length *
+                    3} seconds.`,
+                dismissAfter: 10000,
+            })
+        );
         for (const { type, operation } of operations) {
             yield put(
                 transactionActions.broadcastOperation({
@@ -223,7 +231,7 @@ export function* broadcastMultiOperations({ payload: { operations } }) {
             appActions.addNotification({
                 key: 'trx_' + Date.now(),
                 message: 'All claims completed!',
-                dismissAfter: 7000,
+                dismissAfter: 10000,
             })
         );
     } catch (error) {}
