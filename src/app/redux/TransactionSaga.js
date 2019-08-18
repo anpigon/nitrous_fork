@@ -1,4 +1,12 @@
-import { call, put, select, all, takeEvery } from 'redux-saga/effects';
+import { delay } from 'redux-saga';
+import {
+    call,
+    put,
+    select,
+    all,
+    takeEvery,
+    takeLatest,
+} from 'redux-saga/effects';
 import { fromJS, Set, Map } from 'immutable';
 import tt from 'counterpart';
 import getSlug from 'speakingurl';
@@ -22,6 +30,10 @@ const ssc = new SSC('https://api.steem-engine.com/rpc');
 
 export const transactionWatches = [
     takeEvery(transactionActions.BROADCAST_OPERATION, broadcastOperation),
+    takeLatest(
+        transactionActions.BROADCAST_MULTI_OPERATIONS,
+        broadcastMultiOperations
+    ),
 ];
 
 const hook = {
@@ -192,6 +204,29 @@ export function* broadcastOperation({
         console.error('TransactionSage', error);
         if (errorCallback) errorCallback(error.toString());
     }
+}
+
+function* broadcastMultiOperations({ payload: { operations } }) {
+    try {
+        for (const { type, operation } of operations) {
+            yield put(
+                transactionActions.broadcastOperation({
+                    type,
+                    operation,
+                    successCallback: () => {},
+                    errorCallback: () => {},
+                })
+            );
+            yield call(delay, 3000);
+        }
+        yield put(
+            appActions.addNotification({
+                key: 'trx_' + Date.now(),
+                message: 'All claims completed!',
+                dismissAfter: 7000,
+            })
+        );
+    } catch (error) {}
 }
 
 function hasPrivateKeys(payload) {

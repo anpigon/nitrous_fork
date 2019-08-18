@@ -9,6 +9,10 @@ const DELETE_ERROR = 'transaction/DELETE_ERROR';
 const DISMISS_ERROR = 'transaction/DISMISS_ERROR';
 const SET = 'transaction/SET';
 const REMOVE = 'transaction/REMOVE';
+
+export const BROADCAST_MULTI_OPERATIONS =
+    'transaction/BROADCAST_MULTI_OPERATIONS';
+
 // Saga-related
 const defaultState = fromJS({
     operations: [],
@@ -179,6 +183,11 @@ export const hideConfirm = payload => ({
 
 export const broadcastOperation = payload => ({
     type: BROADCAST_OPERATION,
+    payload,
+});
+
+export const broadcastMultiOperations = payload => ({
+    type: BROADCAST_MULTI_OPERATIONS,
     payload,
 });
 
