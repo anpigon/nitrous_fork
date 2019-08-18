@@ -73,7 +73,7 @@ class UserWallet extends React.Component {
         const { account, claimAllTokensRewards } = this.props;
         const allTokenStatus = account.get('all_token_status').toJS();
         const pendingTokenSymbols = Object.values(allTokenStatus)
-            .filter(parseFloat(e.pending_token))
+            .filter(e => parseFloat(e.pending_token))
             .map(({ symbol }) => symbol);
         claimAllTokensRewards(account, pendingTokenSymbols);
     };
