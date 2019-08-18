@@ -1,6 +1,6 @@
 /* global describe, it, before, beforeEach, after, afterEach */
 
-import { call, select, all, takeEvery } from 'redux-saga/effects';
+import { call, select, all, takeEvery, takeLatest } from 'redux-saga/effects';
 import steem, { api, broadcast } from '@steemit/steem-js';
 import { cloneableGenerator } from 'redux-saga/utils';
 import * as transactionActions from 'app/redux/TransactionReducer';
@@ -10,6 +10,7 @@ import {
     createPatch,
     transactionWatches,
     broadcastOperation,
+    broadcastMultiOperations,
 } from './TransactionSaga';
 import { DEBT_TICKER } from 'app/client_config';
 
@@ -48,6 +49,10 @@ describe('TransactionSaga', () => {
                 takeEvery(
                     transactionActions.BROADCAST_OPERATION,
                     broadcastOperation
+                ),
+                takeLatest(
+                    transactionActions.BROADCAST_MULTI_OPERATIONS,
+                    broadcastMultiOperations
                 ),
             ]);
         });

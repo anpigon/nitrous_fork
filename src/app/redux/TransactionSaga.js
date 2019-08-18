@@ -206,7 +206,7 @@ export function* broadcastOperation({
     }
 }
 
-function* broadcastMultiOperations({ payload: { operations } }) {
+export function* broadcastMultiOperations({ payload: { operations } }) {
     try {
         for (const { type, operation } of operations) {
             yield put(
