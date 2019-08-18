@@ -69,6 +69,17 @@ class UserWallet extends React.Component {
         const { account, claimTokenRewards } = this.props;
         claimTokenRewards(account, token);
     };
+    handleClaimAllTokensRewards = () => {
+        const { account, claimAllTokensRewards } = this.props;
+        const allTokenStatus = account.get('all_token_status').toJS();
+        const pendingTokenSymbols = Object.values(allTokenStatus)
+            .filter(
+                e => e.symbol === 'ZZAN'
+                // !parseFloat(e.pending_token) // TODO: TEST
+            )
+            .map(({ symbol }) => symbol);
+        claimAllTokensRewards(account, pendingTokenSymbols);
+    };
     render() {
         const {
             onShowDepositSteem,
@@ -125,6 +136,9 @@ class UserWallet extends React.Component {
             : [];
         const snax_balance_str = numberWithCommas(
             parseFloat(snaxBalance).toString()
+        );
+        const pendingTokens = Object.values(allTokenStatus).filter(e =>
+            parseFloat(e.pending_token)
         );
 
         let isMyAccount =
@@ -541,18 +555,27 @@ class UserWallet extends React.Component {
                             zebra: parseFloat(pendingUnstakeBalance),
                         })}
                     >
-                        <div className="column small-12">
+                        <div className="column small-12 medium-9">
                             Steem Engine Token
                             <FormattedHTMLMessage
                                 className="secondary"
                                 id="tips_js.steem_engine_tokens"
                             />
                         </div>
+                        <div className="column small-12 medium-3">
+                            <button
+                                // disabled={pendingTokens.length === 0}
+                                className="button hollow ghost slim tiny float-right"
+                                onClick={this.handleClaimAllTokensRewards}
+                            >
+                                All in one claim
+                            </button>
+                        </div>
                         <div className="column small-12">
                             <FormattedAssetTokens
                                 items={otherTokenBalances}
                                 isMyAccount={isMyAccount}
-                                allTokenStatus={allTokenStatus}
+                                pendingTokens={pendingTokens}
                                 handleClaimTokenRewards={
                                     this.handleClaimTokenRewards
                                 }
@@ -678,6 +701,21 @@ export default connect(
                     operation,
                     successCallback,
                 })
+            );
+        },
+
+        claimAllTokensRewards: (account, symbols) => {
+            const username = account.get('name');
+            const operations = symbols.map(symbol => ({
+                type: 'custom_json',
+                operation: {
+                    id: 'scot_claim_token',
+                    required_posting_auths: [username],
+                    json: JSON.stringify({ symbol }),
+                },
+            }));
+            dispatch(
+                transactionActions.broadcastMultiOperations({ operations })
             );
         },
     })
