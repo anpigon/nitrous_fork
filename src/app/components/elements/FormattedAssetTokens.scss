@@ -5,6 +5,7 @@
 	.reward {
 			@include themify($themes) {
 					background-color: themed('colorAccent');
+					color: $color-text-dark;
 			}
 	}
 
