@@ -209,35 +209,56 @@ export function* broadcastOperation({
 export function* broadcastMultiOperations({ payload: { operations } }) {
     try {
         const delaySeconds = 3.5;
+        const _operations = operations.concat([]);
         yield put(
             appActions.addNotification({
                 key: 'trx_' + Date.now(),
                 message: tt('g.all_claim_started', {
                     seconds: (operations.length * delaySeconds).toFixed(0),
                 }),
-                dismissAfter: 10000,
+                dismissAfter: 7000,
             })
         );
-        for (const { type, operation } of operations) {
-            yield put(
-                transactionActions.broadcastOperation({
-                    type,
-                    operation,
-                    successCallback: () => {},
-                    errorCallback: () => {},
-                })
-            );
+        let isError = false;
+        let isDone = false;
+        let isBusy = false;
+        while (!isDone) {
+            if (!isBusy) {
+                const op = _operations.pop();
+                if (op) {
+                    isBusy = true;
+                    const { type, operation } = op;
+                    yield put(
+                        transactionActions.broadcastOperation({
+                            type,
+                            operation,
+                            successCallback: () => {
+                                isBusy = false;
+                            },
+                            errorCallback: () => {
+                                isError = true;
+                                isBusy = false;
+                                isDone = true;
+                            },
+                        })
+                    );
+                } else {
+                    isDone = true;
+                }
+            }
             yield call(delay, delaySeconds * 1000); // every 3.5 seconds
         }
         // completed!!!
-        yield call(delay, delaySeconds * 1000);
-        yield put(
-            appActions.addNotification({
-                key: 'trx_' + Date.now(),
-                message: tt('g.all_claim_completed'),
-                dismissAfter: 10000,
-            })
-        );
+        if (!isError) {
+            yield call(delay, delaySeconds * 1000);
+            yield put(
+                appActions.addNotification({
+                    key: 'trx_' + Date.now(),
+                    message: tt('g.all_claim_completed'),
+                    dismissAfter: 7000,
+                })
+            );
+        }
     } catch (error) {}
 }
 
