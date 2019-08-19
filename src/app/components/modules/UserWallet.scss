@@ -16,28 +16,21 @@
     a.external-link:hover {
       color: themed('textColorAccentHover')
     }
+  }
 
-    .DropdownMenu > .VerticalMenu {
-      right: 0;
-    }
+  .DropdownMenu > .VerticalMenu {
+    right: 0;
+  }
 }
 
 .UserWallet__balance {
 padding-bottom: 1rem;
 padding-top: 1rem;
 
-  &.UserWallet__balance:nth-child(even) {
-      @include themify($themes) {
-        background-color: themed('tableRowEvenBackgroundColor');
-        color: themed('textColorPrimary');
-      }
-  }
-  
-  .Delegations__view {
-
-    a {
-      margin-left: 0.2rem;
-      padding-bottom: 0.1rem;
+&.UserWallet__balance:nth-child(even) {
+    @include themify($themes) {
+      background-color: themed('tableRowEvenBackgroundColor');
+      color: themed('textColorPrimary');
     }
 }
 
