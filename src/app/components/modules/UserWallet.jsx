@@ -561,7 +561,7 @@ class UserWallet extends React.Component {
                         </div>
                         <div className="column small-12 medium-3">
                             <button
-                                // disabled={pendingTokens.length === 0}
+                                disabled={pendingTokens.length === 0}
                                 className="button hollow ghost slim tiny float-right"
                                 onClick={this.handleClaimAllTokensRewards}
                             >
