@@ -25,8 +25,7 @@
 			border: 1px solid transparent;
 			font-family: Roboto, 'Helvetica Neue', Helvetica, Arial, sans-serif;
 
-			// small only
-			@media screen and (max-width: 39.9375em) {
+			@media screen and (max-width: 1240px) {
 				white-space: normal;
 			}
 
