@@ -234,7 +234,7 @@ export function* broadcastMultiOperations({ payload: { operations } }) {
         yield put(
             appActions.addNotification({
                 key: 'trx_' + Date.now(),
-                message: tt('all_claim_completed'),
+                message: tt('g.all_claim_completed'),
                 dismissAfter: 10000,
             })
         );
