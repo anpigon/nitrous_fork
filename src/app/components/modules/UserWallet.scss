@@ -16,11 +16,10 @@
     a.external-link:hover {
       color: themed('textColorAccentHover')
     }
-  }
 
-  .DropdownMenu > .VerticalMenu {
-    right: 0;
-  }
+    .DropdownMenu > .VerticalMenu {
+      right: 0;
+    }
 }
 
 .UserWallet__balance {
