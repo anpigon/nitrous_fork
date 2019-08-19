@@ -208,11 +208,13 @@ export function* broadcastOperation({
 
 export function* broadcastMultiOperations({ payload: { operations } }) {
     try {
+        const delaySeconds = 3.5;
         yield put(
             appActions.addNotification({
                 key: 'trx_' + Date.now(),
-                message: `All claim started. It is completed after about ${operations.length *
-                    3} seconds.`,
+                message: tt('g.all_claim_started', {
+                    seconds: (operations.length * delaySeconds).toFixed(0),
+                }),
                 dismissAfter: 10000,
             })
         );
@@ -225,12 +227,14 @@ export function* broadcastMultiOperations({ payload: { operations } }) {
                     errorCallback: () => {},
                 })
             );
-            yield call(delay, 3000);
+            yield call(delay, delaySeconds * 1000); // every 3.5 seconds
         }
+        // completed!!!
+        yield call(delay, delaySeconds * 1000);
         yield put(
             appActions.addNotification({
                 key: 'trx_' + Date.now(),
-                message: 'All claims completed!',
+                message: tt('all_claim_completed'),
                 dismissAfter: 10000,
             })
         );
