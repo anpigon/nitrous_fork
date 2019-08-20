@@ -23,6 +23,7 @@ import {
 } from 'app/client_config';
 import * as transactionActions from 'app/redux/TransactionReducer';
 import * as globalActions from 'app/redux/GlobalReducer';
+import * as appActions from 'app/redux/AppReducer';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
 import Icon from 'app/components/elements/Icon';
 import classNames from 'classnames';
@@ -683,9 +684,15 @@ export default connect(
             const username = account.get('name');
             const successCallback = () => {
                 dispatch(
+                    appActions.addNotification({
+                        key: 'trx_' + Date.now(),
+                        message: `${symbol} Token Claim Completed.`,
+                        dismissAfter: 7000,
+                    })
+                );
+                dispatch(
                     globalActions.getState({ url: `@${username}/transfers` })
                 );
-                alert('Success Claim!!');
             };
             const operation = {
                 id: 'scot_claim_token',
@@ -703,16 +710,30 @@ export default connect(
 
         claimAllTokensRewards: (account, symbols) => {
             const username = account.get('name');
-            const operations = symbols.map(symbol => ({
-                type: 'custom_json',
-                operation: {
-                    id: 'scot_claim_token',
-                    required_posting_auths: [username],
-                    json: JSON.stringify({ symbol }),
-                },
-            }));
+            const successCallback = () => {
+                dispatch(
+                    appActions.addNotification({
+                        key: 'trx_' + Date.now(),
+                        message: tt('g.all_claim_completed'),
+                        dismissAfter: 7000,
+                    })
+                );
+                dispatch(
+                    globalActions.getState({ url: `@${username}/transfers` })
+                );
+            };
+            const json = symbols.map(symbol => ({ symbol }));
+            const operation = {
+                id: 'scot_claim_token',
+                required_posting_auths: [username],
+                json: JSON.stringify(json),
+            };
             dispatch(
-                transactionActions.broadcastMultiOperations({ operations })
+                transactionActions.broadcastOperation({
+                    type: 'custom_json',
+                    operation,
+                    successCallback,
+                })
             );
         },
     })

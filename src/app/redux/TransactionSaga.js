@@ -30,10 +30,6 @@ const ssc = new SSC('https://api.steem-engine.com/rpc');
 
 export const transactionWatches = [
     takeEvery(transactionActions.BROADCAST_OPERATION, broadcastOperation),
-    takeLatest(
-        transactionActions.BROADCAST_MULTI_OPERATIONS,
-        broadcastMultiOperations
-    ),
 ];
 
 const hook = {
@@ -204,62 +200,6 @@ export function* broadcastOperation({
         console.error('TransactionSage', error);
         if (errorCallback) errorCallback(error.toString());
     }
-}
-
-export function* broadcastMultiOperations({ payload: { operations } }) {
-    try {
-        const delaySeconds = 3.5;
-        const _operations = operations.concat([]);
-        yield put(
-            appActions.addNotification({
-                key: 'trx_' + Date.now(),
-                message: tt('g.all_claim_started', {
-                    seconds: (operations.length * delaySeconds).toFixed(0),
-                }),
-                dismissAfter: 7000,
-            })
-        );
-        let isError = false;
-        let isDone = false;
-        let isBusy = false;
-        while (!isDone) {
-            if (!isBusy) {
-                const op = _operations.pop();
-                if (op) {
-                    isBusy = true;
-                    const { type, operation } = op;
-                    yield put(
-                        transactionActions.broadcastOperation({
-                            type,
-                            operation,
-                            successCallback: () => {
-                                isBusy = false;
-                            },
-                            errorCallback: () => {
-                                isError = true;
-                                isBusy = false;
-                                isDone = true;
-                            },
-                        })
-                    );
-                } else {
-                    isDone = true;
-                }
-            }
-            yield call(delay, delaySeconds * 1000); // every 3.5 seconds
-        }
-        // completed!!!
-        if (!isError) {
-            yield call(delay, delaySeconds * 1000);
-            yield put(
-                appActions.addNotification({
-                    key: 'trx_' + Date.now(),
-                    message: tt('g.all_claim_completed'),
-                    dismissAfter: 7000,
-                })
-            );
-        }
-    } catch (error) {}
 }
 
 function hasPrivateKeys(payload) {

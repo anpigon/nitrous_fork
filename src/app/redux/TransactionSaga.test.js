@@ -10,7 +10,6 @@ import {
     createPatch,
     transactionWatches,
     broadcastOperation,
-    broadcastMultiOperations,
 } from './TransactionSaga';
 import { DEBT_TICKER } from 'app/client_config';
 
@@ -49,10 +48,6 @@ describe('TransactionSaga', () => {
                 takeEvery(
                     transactionActions.BROADCAST_OPERATION,
                     broadcastOperation
-                ),
-                takeLatest(
-                    transactionActions.BROADCAST_MULTI_OPERATIONS,
-                    broadcastMultiOperations
                 ),
             ]);
         });
