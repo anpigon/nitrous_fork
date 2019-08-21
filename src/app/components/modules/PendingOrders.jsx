@@ -1,31 +1,7 @@
 /* eslint react/prop-types: 0 */
 import React from 'react';
 import { connect } from 'react-redux';
-import { Link } from 'react-router';
 import tt from 'counterpart';
-import TransferHistoryRow from 'app/components/cards/TransferHistoryRow';
-import TransactionError from 'app/components/elements/TransactionError';
-import TimeAgoWrapper from 'app/components/elements/TimeAgoWrapper';
-import {
-    numberWithCommas,
-    vestingSteem,
-    delegatedSteem,
-    powerdownSteem,
-    pricePerSteem,
-} from 'app/utils/StateFunctions';
-import shouldComponentUpdate from 'app/utils/shouldComponentUpdate';
-import Tooltip from 'app/components/elements/Tooltip';
-import { FormattedHTMLMessage } from 'app/Translator';
-import {
-    LIQUID_TOKEN,
-    LIQUID_TOKEN_UPPERCASE,
-    VESTING_TOKEN,
-} from 'app/client_config';
-import * as transactionActions from 'app/redux/TransactionReducer';
-import * as globalActions from 'app/redux/GlobalReducer';
-import * as appActions from 'app/redux/AppReducer';
-import DropdownMenu from 'app/components/elements/DropdownMenu';
-import Icon from 'app/components/elements/Icon';
 import classNames from 'classnames';
 import { FormattedDate, FormattedNumber } from 'react-intl';
 import { actions as fetchDataSagaActions } from 'app/redux/FetchDataSaga';
@@ -35,9 +11,6 @@ const HistoryItem = ({ item }) => {
     const price = parseFloat(item.price);
     const quantity = parseFloat(item.quantity);
     const sum = parseFloat((price * quantity).toFixed(5));
-    // const [, n1=""] = item.price.split(".");
-    // const [, n2=""] = item.quantity.split(".");
-    // const n = Math.max(n1.length, n2.length);
     return (
         <tr>
             <td className="text-center">
@@ -182,10 +155,6 @@ export default connect(
         const pendingOrders = global.has('pending_orders')
             ? global.get('pending_orders')
             : null;
-        let buyBook, sellBook, error;
-        if (pendingOrders) {
-            ({ buyBook, sellBook, error } = pendingOrders);
-        }
         return {
             ...ownProps,
             pendingOrders,
