@@ -30,6 +30,7 @@ import proxifyImageUrl from 'app/utils/ProxifyUrl';
 import ArticleLayoutSelector from 'app/components/modules/ArticleLayoutSelector';
 import SanitizedLink from 'app/components/elements/SanitizedLink';
 import DropdownMenu from 'app/components/elements/DropdownMenu';
+import PendingOrders from 'app/components/modules/PendingOrders';
 
 export default class UserProfile extends React.Component {
     constructor() {
@@ -202,7 +203,6 @@ export default class UserProfile extends React.Component {
         let tab_content = null;
 
         let walletClass = '';
-        debugger;
         if (section === 'transfers') {
             walletClass = 'active';
             tab_content = (
@@ -218,7 +218,11 @@ export default class UserProfile extends React.Component {
                 </div>
             );
         } else if (section === 'pending-orders') {
-            tab_content = <div>미체결 거래</div>;
+            tab_content = (
+                <div>
+                    <PendingOrders account={accountImm} />
+                </div>
+            );
         }
         if (
             section === 'curation-rewards' ||
@@ -486,7 +490,7 @@ export default class UserProfile extends React.Component {
                             <li>
                                 <Link
                                     to={`/@${accountname}/pending-orders`}
-                                    activeClassName="acive"
+                                    activeClassName="active"
                                 >
                                     {tt('g.pending-orders')}
                                 </Link>
@@ -495,7 +499,7 @@ export default class UserProfile extends React.Component {
                         <li>
                             <Link
                                 to={`/@${accountname}/transfers`}
-                                activeClassName="acive"
+                                activeClassName="active"
                             >
                                 {tt('g.wallet')}
                             </Link>

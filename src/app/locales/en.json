@@ -254,8 +254,8 @@
         "all_claim_started":
             "All claim started. It is completed after about %(seconds)s seconds.",
         "all_claim_completed": "All claims completed!",
-        "transaction-history": "Transaction history",
-        "pending-orders": "Pending Orders"
+        "pending-orders": "Pending Orders",
+        "my_orders": "My Orders"
     },
     "navigation": {
         "about": "About Steemit, Inc.",
@@ -867,5 +867,15 @@
     },
     "delegations_jsx": {
         "delegations": "Delegations"
+    },
+    "pendingorders_jsx": {
+        "timestamp": "Timestamp",
+        "price": "Price",
+        "quantity": "Quantity",
+        "symbol": "Symbol",
+        "type": "Type",
+        "sum": "Sum",
+        "sell": "Sell",
+        "buy": "Buy"
     }
 }

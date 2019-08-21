@@ -373,3 +373,22 @@ export async function fetchSnaxBalanceAsync(account) {
             return [];
         });
 }
+
+export async function getPendingOrdersAsync({ account }) {
+    let error = false;
+    let buyBook = [];
+    let sellBook = [];
+    try {
+        [buyBook, sellBook] = await Promise.all([
+            ssc.find('market', 'buyBook', {
+                account,
+            }),
+            ssc.find('market', 'sellBook', {
+                account,
+            }),
+        ]);
+    } catch (e) {
+        error = e.message;
+    }
+    return { buyBook, sellBook, error };
+}

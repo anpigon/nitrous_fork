@@ -18,6 +18,7 @@ import {
     fetchFeedDataAsync,
     getStateAsync,
     getScotDataAsync,
+    getPendingOrdersAsync,
 } from 'app/utils/steemApi';
 import { LIQUID_TOKEN_UPPERCASE } from 'app/client_config';
 
@@ -26,6 +27,7 @@ const GET_CONTENT = 'fetchDataSaga/GET_CONTENT';
 const FETCH_STATE = 'fetchDataSaga/FETCH_STATE';
 const FETCH_SCOT_INFO = 'fetchDataSaga/FETCH_SCOT_INFO';
 const FETCH_AUTHOR_RECENT_POSTS = 'fetchDataSaga/FETCH_AUTHOR_RECENT_POSTS';
+const FETCH_PENDING_ORDERS = 'fetchDataSaga/FETCH_PENDING_ORDERS';
 
 export const fetchDataWatches = [
     takeLatest(REQUEST_DATA, fetchData),
@@ -35,6 +37,7 @@ export const fetchDataWatches = [
     takeEvery('global/FETCH_JSON', fetchJson),
     takeLatest(FETCH_SCOT_INFO, fetchScotInfo),
     takeLatest(FETCH_AUTHOR_RECENT_POSTS, fetchAuthorRecentPosts),
+    takeLatest(FETCH_PENDING_ORDERS, fetchPendingOrders),
 ];
 
 export function* getContentCaller(action) {
@@ -510,6 +513,16 @@ function* fetchAuthorRecentPosts(action) {
     yield put(appActions.fetchDataEnd());
 }
 
+function* fetchPendingOrders({ payload }) {
+    try {
+        const { symbol, account } = payload;
+        const result = yield call(getPendingOrdersAsync, { symbol, account });
+        yield put(globalActions.receivePendingOrders(result));
+    } catch (error) {
+        yield put(appActions.steemApiError(error.message));
+    }
+}
+
 // Action creators
 export const actions = {
     requestData: payload => ({
@@ -534,6 +547,11 @@ export const actions = {
 
     fetchAuthorRecentPosts: payload => ({
         type: FETCH_AUTHOR_RECENT_POSTS,
+        payload,
+    }),
+
+    fetchPendingOrders: payload => ({
+        type: FETCH_PENDING_ORDERS,
         payload,
     }),
 };
