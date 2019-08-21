@@ -253,7 +253,9 @@
         "written_from": "written from %(app_name)s",
         "all_claim_started":
             "All claim started. It is completed after about %(seconds)s seconds.",
-        "all_claim_completed": "All claims completed!"
+        "all_claim_completed": "All claims completed!",
+        "transaction-history": "Transaction history",
+        "pending-orders": "Pending Orders"
     },
     "navigation": {
         "about": "About Steemit, Inc.",

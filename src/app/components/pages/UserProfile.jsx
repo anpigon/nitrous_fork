@@ -202,6 +202,7 @@ export default class UserProfile extends React.Component {
         let tab_content = null;
 
         let walletClass = '';
+        debugger;
         if (section === 'transfers') {
             walletClass = 'active';
             tab_content = (
@@ -216,7 +217,10 @@ export default class UserProfile extends React.Component {
                     />
                 </div>
             );
-        } else if (
+        } else if (section === 'pending-orders') {
+            tab_content = <div>미체결 거래</div>;
+        }
+        if (
             section === 'curation-rewards' ||
             section === 'author-rewards' ||
             section === 'permissions' ||
@@ -421,7 +425,8 @@ export default class UserProfile extends React.Component {
             !(
                 section === 'transfers' ||
                 section === 'permissions' ||
-                section === 'password'
+                section === 'password' ||
+                section === 'pending-orders'
             )
         ) {
             tab_content = (
@@ -477,6 +482,16 @@ export default class UserProfile extends React.Component {
                 </div>
                 <div className="columns shrink">
                     <ul className="menu" style={{ flexWrap: 'wrap' }}>
+                        {isMyAccount && (
+                            <li>
+                                <Link
+                                    to={`/@${accountname}/pending-orders`}
+                                    activeClassName="acive"
+                                >
+                                    {tt('g.pending-orders')}
+                                </Link>
+                            </li>
+                        )}
                         <li>
                             <Link
                                 to={`/@${accountname}/transfers`}
