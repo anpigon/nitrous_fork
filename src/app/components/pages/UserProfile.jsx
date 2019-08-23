@@ -486,16 +486,14 @@ export default class UserProfile extends React.Component {
                 </div>
                 <div className="columns shrink">
                     <ul className="menu" style={{ flexWrap: 'wrap' }}>
-                        {isMyAccount && (
-                            <li>
-                                <Link
-                                    to={`/@${accountname}/pending-orders`}
-                                    activeClassName="active"
-                                >
-                                    {tt('g.pending-orders')}
-                                </Link>
-                            </li>
-                        )}
+                        <li>
+                            <Link
+                                to={`/@${accountname}/pending-orders`}
+                                activeClassName="active"
+                            >
+                                {tt('g.pending-orders')}
+                            </Link>
+                        </li>
                         <li>
                             <Link
                                 to={`/@${accountname}/transfers`}

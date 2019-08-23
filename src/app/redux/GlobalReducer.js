@@ -39,7 +39,6 @@ const SHOW_DIALOG = 'global/SHOW_DIALOG';
 const HIDE_DIALOG = 'global/HIDE_DIALOG';
 // Saga-related:
 export const GET_STATE = 'global/GET_STATE';
-const RECEIVE_PENDING_ORDERS = 'global/RECEIVE_PENDING_ORDERS';
 
 /**
  * Transfrom nested JS object to appropriate immutable collection.
@@ -477,10 +476,6 @@ export default function reducer(state = defaultState, action = {}) {
             return state.update('active_dialogs', d => d.delete(payload.name));
         }
 
-        case RECEIVE_PENDING_ORDERS: {
-            return state.set('pending_orders', payload);
-        }
-
         default:
             return state;
     }
@@ -621,10 +616,5 @@ export const hideDialog = payload => ({
 
 export const getState = payload => ({
     type: GET_STATE,
-    payload,
-});
-
-export const receivePendingOrders = payload => ({
-    type: RECEIVE_PENDING_ORDERS,
     payload,
 });

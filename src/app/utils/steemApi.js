@@ -150,6 +150,16 @@ export async function attachScotData(url, state) {
         return;
     }
 
+    // pending-orders
+    urlParts = url.match(/^[\/]?@([^\/]+)\/pending-orders[\/]?$/);
+    if (urlParts) {
+        const account = urlParts[1];
+        const pendingOrders = await getPendingOrdersAsync({ account });
+        state.accounts[account].pending_orders = pendingOrders;
+        return;
+    }
+
+    // transfers
     urlParts = url.match(/^[\/]?@([^\/]+)\/transfers[\/]?$/);
     if (urlParts) {
         const account = urlParts[1];
