@@ -130,7 +130,7 @@ const PendingOrders = ({ account }) => {
                 </div>
             </div>
             <div className="row">
-                <div className="column small-12">
+                <div className="column small-12 PendingOrders__list">
                     {pendingOrders ? (
                         <HistoryList pendingOrders={pendingOrders} />
                     ) : null}
