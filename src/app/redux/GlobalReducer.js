@@ -420,10 +420,7 @@ export default function reducer(state = defaultState, action = {}) {
                         const key = `${value.author}/${value.permlink}`;
                         value = fromJS(value);
                         value = value.set('stats', fromJS(contentStats(value)));
-                        if (!content.has(key)) {
-                            value['body'] = value['desc'];
-                            map.set(key, value);
-                        }
+                        map.set(key, value);
                     });
                 });
             });
