@@ -404,7 +404,11 @@ export default function reducer(state = defaultState, action = {}) {
         }
 
         case RECEIVE_AUTHOR_RECENT_POSTS: {
-            const { data, accountname, category } = payload;
+            const {
+                data,
+                accountname,
+                category = 'recent_user_posts',
+            } = payload;
             const key = ['accounts', accountname, category];
             let new_state = state.updateIn(key, List(), list => {
                 return list.withMutations(posts => {
