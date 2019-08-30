@@ -154,7 +154,7 @@ class ReplyEditor extends React.Component {
 
                 clearTimeout(saveEditorTimeout);
                 saveEditorTimeout = setTimeout(() => {
-                    // console.log('save formId', formId, body.value)
+                    console.log('save formId', formId, body.value); // anpigon
                     localStorage.setItem(
                         'replyEditorData-' + formId,
                         JSON.stringify(data, null, 0)
